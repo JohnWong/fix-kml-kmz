@@ -1,3 +1,6 @@
+#!/usr/bin/env python 
+# -*- coding: utf8 -*- 
+
 from xml.sax import *
 import io
 import re
@@ -5,6 +8,10 @@ import zipfile
 import shutil
 import os
 import sys
+import codecs
+
+reload(sys)
+sys.setdefaultencoding('utf-8')
 
 #sys.argv =[sys.argv[0],'./moshikou.kml']
 
@@ -23,7 +30,7 @@ data_index = 1
 
 class TransLatePosition:
 
-    offset_file = open(data_file, encoding="utf8")
+    offset_file = codecs.open(data_file, encoding="utf8")
     data = offset_file.readline()
     print("Totoal size of data one:%d" % data.__sizeof__())
 
@@ -191,11 +198,11 @@ class OffsetHandler(ContentHandler):
             print("%r is not a file"  % filename)
             return
         if filename[-3:] == "kml":
-            with open(target_name, mode="w", encoding="utf8") as file_writer:
+            with codecs.open(target_name, mode="w", encoding="utf8") as file_writer:
                 handler.setFileWriter(file_writer)
                 parser.setContentHandler(handler)
                 data=""
-                with open(source_name, encoding="utf8") as file:
+                with codecs.open(source_name, encoding="utf8") as file:
                     data = file.read().strip()
                     file.close()
                 parser.parse(io.StringIO(data))
@@ -207,11 +214,11 @@ class OffsetHandler(ContentHandler):
                 kmz_zip.extractall(path=temp_dir)
                 kmz_zip.close()
 
-            with open(temp_dir + "/doc_converted.kml", mode="w", encoding="utf8") as file_writer:
+            with codecs.open(temp_dir + "/doc_converted.kml", mode="w", encoding="utf8") as file_writer:
                 handler.setFileWriter(file_writer)
                 parser.setContentHandler(handler)
                 data=""
-                with open(temp_dir + "/doc.kml", encoding="utf8") as file:
+                with codecs.open(temp_dir + "/doc.kml", encoding="utf8") as file:
                     data = file.read().strip()
                     file.close()
                 parser.parse(io.StringIO(data))
